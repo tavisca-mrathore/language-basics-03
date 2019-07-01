@@ -41,7 +41,112 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static int[] SelectMeals(int[] protein, int[] carbs, int[] fat, string[] dietPlans)
         {
             // Add your code here.
-            throw new NotImplementedException();
+            List<int> indexes = new List<int>();
+            int[] ans = new int[dietPlans.Length];
+            int[] total = new int[protein.Length];
+
+            // compute total calories from protien, carbs and fat
+            for (int index = 0; index < protein.Length; index++)
+            {
+                total[index] = 5 * protein[index] + 5 * carbs[index] + 9 * fat[index];
+            }
+
+            // iterate through dietplan
+            for (int index = 0; index < dietPlans.Length; index++)
+            {
+                indexes.Clear();
+                
+                // append indexes for each item
+                for (int index2 = 0; index2 < protein.Length; index2++)
+                {
+                    indexes.Add(index2);
+                }
+
+                // iterate through each item of each diet plan
+                for (int index2 = 0; index2 < dietPlans[index].Length; index2++)
+                {
+                    switch (dietPlans[index][index2])
+                    {
+                        case 'C':
+                            indexes = Maximum(carbs, indexes);
+                            break;
+                        case 'c':
+                            indexes = Minimum(carbs, indexes);
+                            break;
+                        case 'P':
+                            indexes = Maximum(protein, indexes);
+                            break;
+                        case 'p':
+                            indexes = Minimum(protein, indexes);
+                            break;
+                        case 'F':
+                            indexes = Maximum(fat, indexes);
+                            break;
+                        case 'f':
+                            indexes = Minimum(fat, indexes);
+                            break;
+                        case 'T':
+                            indexes = Maximum(total, indexes);
+                            break;
+                        case 't':
+                            indexes = Minimum(total, indexes);
+                            break;
+                    }
+                    // break if exact one match occurs
+                    if (indexes.Count == 1)
+                    {
+                        break;
+                    }
+                }
+                // final value appended is either the one that matches
+                // or it is the default one when no match occurs
+                ans[index] = indexes[0];
+            }
+            return ans;
+        }
+        private static List<int> Minimum(int[] arr, List<int> indexes)
+        {
+            int minimum = arr[indexes[0]];
+            List<int> temp = new List<int>();
+
+            for (int index = 0; index < indexes.Count; index++)
+            {
+                if (arr[indexes[index]] < minimum)
+                {
+                    minimum = arr[indexes[index]];
+                }
+            }
+            for (int index = 0; index < indexes.Count; index++)
+            {
+                if (arr[indexes[index]] == minimum)
+                {
+                    temp.Add(indexes[index]);
+                }
+            }
+
+            return temp;
+        }
+        private static List<int> Maximum(int[] arr, List<int> indexes)
+        {
+            int maximum = arr[indexes[0]];
+            List<int> temp = new List<int>();
+
+            for (int index = 0; index < indexes.Count; index++)
+            {
+                if (arr[indexes[index]] > maximum)
+                {
+                    maximum = arr[indexes[index]];
+                }
+            }
+            for (int index = 0; index < indexes.Count; index++)
+            {
+                if (arr[indexes[index]] == maximum)
+                {
+                    temp.Add(indexes[index]);
+                }
+            }
+
+            return temp;
         }
     }
 }
